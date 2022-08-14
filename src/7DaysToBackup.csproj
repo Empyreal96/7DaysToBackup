@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>_7DaysToBackup</RootNamespace>
+    <StartupObject>_7DaysToBackup.Program</StartupObject>
+    <Authors>Hayden (Empyreal96)</Authors>
+    <Product>7 Days To Die Gamesave Backup Tool</Product>
+    <Description>A simple command-line tool to backup saves after each game exit</Description>
+    <Copyright>Empyreal96</Copyright>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>EmpyKeyDSP.pfx</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+
+</Project>
