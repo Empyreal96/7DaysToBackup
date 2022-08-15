@@ -14,4 +14,21 @@
     <DelaySign>false</DelaySign>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="7DaysToBackup-AppData.bat" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="7DaysToBackup-AppData.bat" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="7DaysToBackup_AppData.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="EmpyKeyDSP.pfx">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

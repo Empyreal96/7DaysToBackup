@@ -11,22 +11,30 @@ namespace _7DaysToBackup
         static string desktopPath { get; set; }
         static string appDataPath { get; set; }
         static bool isRunning { get; set; }
+        static Process[] SevenDaysProcess { get; set; }
+        static int SevenDaysPID { get; set; }
+        static string folderDate { get; set; }
+        static string folderDateFixed { get; set; }
         static void Main(string[] args)
         {
+            Console.Title = "7 Days to Die Gamesave Backup Tool by Empyreal96";
             if (args.Length != 0)
             {
-                Console.WriteLine("7 Days to Die Gamesave Backup Tool (App Info) by Empyreal96");
-                Console.WriteLine("\n");
-                Console.WriteLine("This tools will attempt to automatically backup your World Saves to your Desktop each time you exit the game!");
-                Console.WriteLine("\n");
-                Console.WriteLine("Notes:");
-                Console.WriteLine("- This tool will NOT delete any data from your Game Saves or Backups, this is down to the User to manage what old saves are still backed up.");
-                Console.WriteLine("- Data will be saved to \"Desktop\\7_DAYS_TO_DIE_BACKUPS\" in chronological order of Date and Time.");
-                Console.WriteLine("- Administrator privilages may be needed to access your \"AppData\\Roaming\\7DaysToDie\" folder inside your Profile.");
-                Console.WriteLine("- Launch this program before loading the game (Recommended), or on Windows Startup for convenience (optional)");
-                Console.WriteLine("Press ENTER key to exit");
-                Console.ReadLine();
-                Environment.Exit(0);
+                
+                
+                
+                    Console.WriteLine("7 Days to Die Gamesave Backup Tool (App Info) by Empyreal96");
+                    Console.WriteLine("\n");
+                    Console.WriteLine("This tools will attempt to automatically backup your World Saves to your Desktop each time you exit the game!");
+                    Console.WriteLine("\n");
+                    Console.WriteLine("Notes:");
+                    Console.WriteLine("- This tool will NOT delete any data from your Game Saves or Backups, this is down to the User to manage what old saves are still backed up.");
+                    Console.WriteLine("- Data will be saved to \"Desktop\\7_DAYS_TO_DIE_BACKUPS\" in chronological order of Date and Time.");
+                    Console.WriteLine("- Launch this program before loading the game (Recommended), or on Windows Startup for convenience (optional)");
+                    Console.WriteLine("Press ENTER key to exit");
+                    Console.ReadLine();
+                    Environment.Exit(0);
+                
             }
             else
             {
@@ -61,14 +69,14 @@ namespace _7DaysToBackup
                 Console.WriteLine(ex.Source);
             }
         }
-        public static int SevenDaysPID { get; set; }
+       
         public static void isApplicationRunning()
         {
             try
             {
                 while (isRunning == false)
                 {
-                    Process[] SevenDaysProcess = Process.GetProcessesByName("7DaysToDie");
+                    SevenDaysProcess = Process.GetProcessesByName("7DaysToDie");
                     if (SevenDaysProcess.Length == 0)
                     {
                         isRunning = false;
@@ -105,7 +113,7 @@ namespace _7DaysToBackup
                 while (isRunning == true)
                 {
                    
-                    var GameProcess = Process.GetProcessById(SevenDaysPID);
+                    Process GameProcess = Process.GetProcessById(SevenDaysPID);
                     GameProcess.EnableRaisingEvents = true;
                     GameProcess.Exited += new EventHandler(GameProcess_Exited);
                     
@@ -121,7 +129,7 @@ namespace _7DaysToBackup
                 Console.WriteLine(ex.Source);
             }
         }
-
+        
         private static void GameProcess_Exited(object sender, EventArgs e)
         {
             try
@@ -131,18 +139,22 @@ namespace _7DaysToBackup
 
                 /// TODO: Start backup of files.
                 /// 
-               // DateTime dt = DateTime.ParseExact(DateTime.Now.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
-                string folderDate = DateTime.UtcNow.ToString();
-                string folderDateFixed = folderDate.Replace('/', '_').Replace(':', '-');
+                // DateTime dt = DateTime.ParseExact(DateTime.Now.ToString(), "MM/dd/yyyy hh:mm:ss tt", CultureInfo.InvariantCulture);
+                folderDate = DateTime.UtcNow.ToString();
+                folderDateFixed = folderDate.Replace('/', '_').Replace(':', '-');
                 string SevenDaySaveFilesDir = Path.Combine(appDataPath + "\\7DaysToDie");
                 string OutputDirectory = Path.Combine(desktopPath + $"\\7DaysToDie_BACKUPS\\{folderDateFixed}");
-                
+
 
                 Console.WriteLine($"Copying: {SevenDaySaveFilesDir} > {OutputDirectory}");
                 Console.WriteLine("Please Wait.");
                 CopyDirectory(SevenDaySaveFilesDir, OutputDirectory, true);
                 Console.Clear();
-                Console.WriteLine("Backup saved to " + OutputDirectory);
+                Console.WriteLine("Backup saved to " + OutputDirectory + "\n");
+
+                SevenDaysProcess = null;
+                SevenDaysPID = 0;
+                GC.Collect();
                 ApplicationStart();
 
             }
@@ -193,10 +205,15 @@ namespace _7DaysToBackup
             {
                 foreach (DirectoryInfo subDir in dirs)
                 {
-                    string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
-                    CopyDirectory(subDir.FullName, newDestinationDir, true);
+                    if (subDir.Name != "GeneratedWorlds" && subDir.Name != "Screenshots")
+                    {
+                        string newDestinationDir = Path.Combine(destinationDir, subDir.Name);
+                        CopyDirectory(subDir.FullName, newDestinationDir, true);
+                    }
                 }
             }
+
+            dirs = null;
         }
     }
 }
