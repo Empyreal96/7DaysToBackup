@@ -20,6 +20,7 @@ To run just double click before you load 7 Days To Die, the whole app is automat
 ### What's New?
 - Memory Improvements when running for a long time
 - Included a small batch script to open the 7 Days To Die AppData folder
+- Prevent "GeneratedWorlds" and "Screenshots" being backed up
 
 ![1](https://user-images.githubusercontent.com/64583248/184534825-fbc4fbde-eea3-462d-94e7-bf0cbb50fa8b.png)
 ![2](https://user-images.githubusercontent.com/64583248/184534826-6056a613-08e8-4846-b3a6-691617c8f40f.png)
